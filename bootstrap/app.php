@@ -25,6 +25,8 @@ $app->withFacades();
 
 $app->withEloquent();
 
+$app->configure('filesystems');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
