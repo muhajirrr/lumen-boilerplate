@@ -26,6 +26,7 @@ $app->withFacades();
 $app->withEloquent();
 
 $app->configure('filesystems');
+$app->configure('cors');
 
 /*
 |--------------------------------------------------------------------------
@@ -59,9 +60,9 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    Spatie\Cors\Cors::class,
+]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
@@ -81,6 +82,7 @@ $app->singleton(
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Spatie\Cors\CorsServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
