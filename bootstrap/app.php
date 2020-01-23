@@ -83,6 +83,7 @@ $app->middleware([
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Spatie\Cors\CorsServiceProvider::class);
+$app->register(\Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
