@@ -3,11 +3,15 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class BaseRepository
 {
     protected $model;
     protected $perPage = 15;
+    protected $useUuid = true;
+    protected $useSlug = true;
+    protected $slugKey = 'nama';
 
     public function __construct(Model $model)
     {
@@ -51,15 +55,27 @@ class BaseRepository
 
     public function create(array $params)
     {
-        return $this->model->create($params);
+        $model = $this->model->newInstance($params);
+
+        if ($this->useUuid)
+            $model->id = Str::uuid()->toString();
+
+        if ($this->useSlug)
+            $model->slug = Str::slug($model->{$this->slugKey});
+
+        $model->save();
+
+        return $model;
     }
 
     public function update(Model $model, array $params)
     {
-        $model->update($params);
+        $model->fill($params);
 
-        // get updated model from database
-        $model = $this->findOne($model->id);
+        if ($this->useSlug)
+            $model->slug = Str::slug($model->{$this->slugKey});
+            
+        $model->save();
 
         return $model;
     }
@@ -69,7 +85,8 @@ class BaseRepository
         return $model->delete();
     }
 
-    public function shouldPaginate() {
+    public function shouldPaginate()
+    {
         if ($paginate = app('request')->input('paginate'))
             return filter_var($paginate, FILTER_VALIDATE_BOOLEAN);
 
